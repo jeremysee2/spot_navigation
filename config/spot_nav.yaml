@@ -1,0 +1,3 @@
+rates:
+  # loop_frequency is the frequency of the loop which publishes messages
+  loop_frequency: 50.0

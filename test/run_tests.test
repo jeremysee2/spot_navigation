@@ -1,0 +1,3 @@
+<launch>
+    <test test-name="spot_navigation_tests" pkg="spot_navigation" type="run_tests.py"/>
+</launch>

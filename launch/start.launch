@@ -1,0 +1,6 @@
+<launch>
+    <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
+    <node pkg="spot_navigation" type="spot_nav.py" name="spot_nav" ns="nav_app" output="screen">
+        <rosparam file="$(arg driver_config)" command="load" />
+    </node>
+</launch>
