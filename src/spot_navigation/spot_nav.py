@@ -5,7 +5,7 @@ import pickle
 import tf2_ros, tf2_geometry_msgs
 import rospy
 
-from geometry_msgs.msg import Pose, PoseStamped
+from geometry_msgs.msg import PoseStamped
 from spot_msgs.msg import WorldObjectArray, WorldObject
 from spot_msgs.msg import AprilTagProperties
 from spot_msgs.msg import FrameTreeSnapshot, ParentEdge
@@ -40,9 +40,6 @@ class SpotNav:
             # Check if april_tag is None
             if april_tag is None:
                 continue
-            rospy.loginfo(
-                f"Found tag {april_tag.tag_id} at {world_object.frame_tree_snapshot.child_edges[0].parent_tform_child.position}"
-            )
 
             # Create the FrameTreeSnapshot as a dictionary
             frame_tree_snapshot: typing.Dict[str, PoseStamped] = {}
@@ -80,6 +77,10 @@ class SpotNav:
                 self.fiducials_seen[fiducial.tag_id].append(fiducial)
             else:
                 self.fiducials_seen[fiducial.tag_id] = [fiducial]
+
+            rospy.loginfo(
+                f"fiducial: {fiducial.tag_id}\n position: {fiducial.fiducial_pose.pose.position}\n filtered_position: {fiducial.filtered_fiducial_pose.pose.position}"
+            )
 
     def initialize_tf2(self):
         self.tf_buffer = tf2_ros.Buffer()
