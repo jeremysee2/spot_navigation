@@ -41,7 +41,7 @@ jobs:
           ls $GITHUB_WORKSPACE/catkin_ws/src/spot_navigation
           ls $GITHUB_WORKSPACE/catkin_ws/src/spot_ros
 
-      # Install the Turtlebot and Gazebo packages
+      # Install the required packages
       - name: Install dependencies (minus qttools)
         run: |
           sudo apt-get update && \
