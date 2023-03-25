@@ -14,7 +14,12 @@ RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
 
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
 
-RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet ros-noetic-roslint ros-noetic-pcl-ros ros-noetic-catkin python3-catkin-pkg
+RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet \
+    ros-noetic-roslint ros-noetic-pcl-ros ros-noetic-catkin python3-catkin-pkg ros-noetic-tf2-tools
+
+# Install RTABMap ROS from source
+RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
+
 RUN python3 -m pip install cython bosdyn-client bosdyn-mission bosdyn-api bosdyn-core empy numpy
 RUN chmod +x /opt/ros/noetic/setup.sh
 RUN /opt/ros/noetic/setup.sh
@@ -27,7 +32,7 @@ RUN rosdep install --from-paths /ros/catkin_ws/src --ignore-src -y
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    catkin_make"
+    catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON "
 
 # Source the new packages
 RUN chmod +x /ros/catkin_ws/devel/setup.sh && /ros/catkin_ws/devel/setup.sh

@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   spot_msgs
   std_msgs
   tf2_geometry_msgs
+  tf2_sensor_msgs
   tf2_msgs
 )
 
@@ -74,7 +75,7 @@ catkin_python_setup()
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   sensor_msgs#   spot_msgs#   std_msgs#   tf2_geometry_msgs#   tf2_msgs
+#   geometry_msgs#   sensor_msgs#   spot_msgs#   std_msgs#   tf2_geometry_msgs #tf2_sensor_msgs #   tf2_msgs
 # )
 
 ################################################
@@ -109,7 +110,7 @@ catkin_python_setup()
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES spot_navigation
-#  CATKIN_DEPENDS geometry_msgs rospy sensor_msgs spot_msgs std_msgs tf2_geometry_msgs tf2_msgs
+#  CATKIN_DEPENDS geometry_msgs rospy sensor_msgs spot_msgs std_msgs tf2_geometry_msgs tf2_sensor_msgs tf2_msgs
 #  DEPENDS system_lib
 )
 

@@ -26,9 +26,6 @@ class SpotNav:
         )
 
     def world_objects_callback(self, msg: WorldObjectArray):
-        rospy.loginfo("world_objects_callback")
-        rospy.loginfo(str(msg))
-
         # Save the message to a class variable tracking the fiducials in the message
         self.world_objects: typing.List[WorldObject] = msg.world_objects
 
@@ -78,8 +75,8 @@ class SpotNav:
             else:
                 self.fiducials_seen[fiducial.tag_id] = [fiducial]
 
-            rospy.loginfo(
-                f"fiducial: {fiducial.tag_id}\n position: {fiducial.fiducial_pose.pose.position}\n filtered_position: {fiducial.filtered_fiducial_pose.pose.position}"
+            rospy.logdebug(
+                f"fiducial: {fiducial.tag_id}\n position_x: {fiducial.fiducial_pose.pose.position.x:.2f}\n filtered_position_x: {fiducial.filtered_fiducial_pose.pose.position.x:.2f}"
             )
 
     def initialize_tf2(self):
