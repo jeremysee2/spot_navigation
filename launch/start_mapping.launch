@@ -1,0 +1,27 @@
+<launch>
+
+    <!--
+        <include file="$(find spot_driver)/launch/driver.launch">
+            <arg name="username" default="dummyusername" />
+            <arg name="password" default="dummypassword" />
+            <arg name="hostname" default="192.168.80.3" />
+        </include>
+    -->
+
+    <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
+
+    <!-- Start the Spot Navigation transforms node -->
+    <node pkg="spot_navigation" type="spot_transforms.py" name="spot_tf" ns="spot_tf_app" output="screen">
+        <rosparam file="$(arg driver_config)" command="load" />
+    </node>
+
+    <!-- Start the Spot Navigation logging node -->
+    <node pkg="spot_navigation" type="spot_nav.py" name="spot_nav" ns="nav_app" output="screen">
+        <rosparam file="$(arg driver_config)" command="load" />
+    </node>
+
+    <!-- Start the RTABMap navigation stack -->
+    <include file="$(find spot_navigation)/launch/rtabmap_spot.launch">
+        <param name="rtabmap_args" type="string" value="--delete_db_on_start" />
+    </include>
+</launch>

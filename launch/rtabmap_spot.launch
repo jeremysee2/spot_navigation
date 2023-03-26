@@ -1,0 +1,136 @@
+<launch>
+    <!-- Spot camera names -->
+    <arg name="camera_name1" default="frontleft" />
+    <arg name="camera_name2" default="frontright" />
+    <arg name="camera_name3" default="left" />
+    <arg name="camera_name4" default="right" />
+    <arg name="camera_name5" default="back" />
+
+    <!-- Common frame name -->
+    <arg name="master_frame" default="body" />
+
+   <!-- sync rgb/depth images per camera -->
+    <group ns="$(arg camera_name1)">
+        <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera1_nodelet_manager">
+            <remap from="rgb/image"         to="/spot/camera/frontleft/image"/>
+            <remap from="depth/image"       to="/spot/depth/frontleft/image"/>
+            <remap from="rgb/camera_info"   to="/spot/camera/frontleft/camera_info"/>
+        </node>
+    </group>
+
+    <group ns="$(arg camera_name2)">
+        <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera2_nodelet_manager">
+            <remap from="rgb/image"         to="/spot/camera/frontright/image"/>
+            <remap from="depth/image"       to="/spot/depth/frontright/image"/>
+            <remap from="rgb/camera_info"   to="/spot/camera/frontright/camera_info"/>
+        </node>
+    </group>
+
+    <group ns="$(arg camera_name3)">
+        <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera3_nodelet_manager">
+            <remap from="rgb/image"         to="/spot/camera/left/image"/>
+            <remap from="depth/image"       to="/spot/depth/left/image"/>
+            <remap from="rgb/camera_info"   to="/spot/camera/left/camera_info"/>
+        </node>
+    </group>
+
+    <group ns="$(arg camera_name4)">
+        <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera4_nodelet_manager">
+            <remap from="rgb/image"         to="/spot/camera/right/image"/>
+            <remap from="depth/image"       to="/spot/depth/right/image"/>
+            <remap from="rgb/camera_info"   to="/spot/camera/right/camera_info"/>
+        </node>
+    </group>
+
+    <group ns="$(arg camera_name5)">
+        <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera5_nodelet_manager">
+            <remap from="rgb/image"         to="/spot/camera/back/image"/>
+            <remap from="depth/image"       to="/spot/depth/back/image"/>
+            <remap from="rgb/camera_info"   to="/spot/camera/back/camera_info"/>
+        </node>
+    </group>
+
+    <!-- Launch rtabmap node -->
+    <arg name="strategy"            default="0" />
+    <arg name="feature"             default="6" />
+    <arg name="nn"                  default="3" />
+    <arg name="max_depth"           default="4.0" />
+    <arg name="min_inliers"         default="20" />
+    <arg name="inlier_distance"     default="0.02" />
+    <arg name="local_map"           default="1000" />
+    <arg name="odom_info_data"      default="true" />
+    <arg name="wait_for_transform"  default="true" />
+    
+    <node name="rtabmap" pkg="rtabmap_ros" type="rtabmap" output="screen" args="--delete_db_on_start">
+      
+      <!-- Set the frame_id and the camera number. -->
+      <param name="frame_id" type="string" value="$(arg master_frame)"/>
+      <param name="rgbd_cameras"    type="int"    value="5"/>
+
+      <!-- Subscribe to topics -->
+      <param name="subscribe_depth" type="bool" value="false"/>
+      <param name="subscribe_rgbd" type="bool" value="true"/>
+      <param name="subscribe_scan_cloud" type="bool" value="true"/>
+
+      <remap from="odom"              to="/spot/odometry"/>
+      <remap from="rgbd_image0"       to="/$(arg camera_name1)/rgbd_image"/>
+      <remap from="rgbd_image1"       to="/$(arg camera_name2)/rgbd_image"/>
+      <remap from="rgbd_image2"       to="/$(arg camera_name3)/rgbd_image"/>
+      <remap from="rgbd_image3"       to="/$(arg camera_name4)/rgbd_image"/>
+      <remap from="rgbd_image4"       to="/$(arg camera_name5)/rgbd_image"/>
+
+      <remap from="scan_cloud" to="/spot/nav/lidar/points"/>
+      <param name="queue_size" type="int" value="10"/>
+
+      <!-- RTAB-Map's parameters -->
+      <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
+      <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
+      <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
+      <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+      <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>
+      <param name="Grid/FromDepth"            type="string" value="false"/> <!-- occupancy grid from lidar -->
+      <param name="Reg/Force3DoF"             type="string" value="true"/>
+      
+      <param name="Reg/Strategy"              type="string" value="1"/> <!-- 1=ICP -->
+
+    <!-- Reg/Strategy=0: all transforms are computed with only visual features
+    Reg/Strategy=1: loop closure is computed with visual->icp (visual gives the rough guess to ICP), but proximity detection and neighbor refining are ICP only based on guess from odometry.
+    Reg/Strategy=2: loop closure, proximity detection and neighbot refining are computed with visual->icp (visual gives the rough guess to ICP) -->
+
+      
+      <!-- ICP parameters -->
+      <param name="Icp/VoxelSize"                 type="string" value="0.05"/>
+      <param name="Icp/MaxCorrespondenceDistance" type="string" value="0.1"/>
+    </node>
+
+    <node pkg="rtabmap_ros" type="rtabmapviz" name="rtabmapviz" args="-d $(find rtabmap_ros)/launch/config/rgbd_gui.ini" output="screen">
+        <param name="frame_id"        type="string" value="$(arg master_frame)"/>
+        <param name="rgbd_cameras"    type="int"    value="5"/>
+        <param name="subscribe_depth" type="bool" value="false"/>
+        <param name="subscribe_rgbd"  type="bool" value="true"/>
+        <param name="subscribe_rgb"   type="bool" value="false"/>
+        <param name="subscribe_scan_cloud" type="bool" value="true"/>
+
+        <remap from="odom"              to="/spot/odometry"/>
+        <remap from="rgbd_image0"       to="/$(arg camera_name1)/rgbd_image"/>
+        <remap from="rgbd_image1"       to="/$(arg camera_name2)/rgbd_image"/>
+        <remap from="rgbd_image2"       to="/$(arg camera_name3)/rgbd_image"/>
+        <remap from="rgbd_image3"       to="/$(arg camera_name4)/rgbd_image"/>
+        <remap from="rgbd_image4"       to="/$(arg camera_name5)/rgbd_image"/>
+        <remap from="scan_cloud"        to="/spot/nav/lidar/points"/>
+
+        <param name="queue_size" type="int" value="10"/>
+
+        <!-- RTAB-Map's parameters -->
+        <param name="RGBD/NeighborLinkRefining" type="string" value="true"/>
+        <param name="RGBD/ProximityBySpace"     type="string" value="true"/>
+        <param name="RGBD/AngularUpdate"        type="string" value="0.01"/>
+        <param name="RGBD/LinearUpdate"         type="string" value="0.01"/>
+        <param name="RGBD/OptimizeFromGraphEnd" type="string" value="false"/>
+        <param name="Grid/FromDepth"            type="string" value="false"/> <!-- occupancy grid from lidar -->
+        <param name="Reg/Force3DoF"             type="string" value="true"/>
+        
+        <param name="Reg/Strategy"              type="string" value="1"/> <!-- 1=ICP -->
+    </node>
+
+</launch>
