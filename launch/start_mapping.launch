@@ -9,11 +9,6 @@
 
     <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
 
-    <!-- Start the Spot Navigation transforms node -->
-    <node pkg="spot_navigation" type="spot_transforms.py" name="spot_tf" ns="spot_tf_app" output="screen">
-        <rosparam file="$(arg driver_config)" command="load" />
-    </node>
-
     <!-- Start the Spot Navigation logging node -->
     <node pkg="spot_navigation" type="spot_nav.py" name="spot_nav" ns="nav_app" output="screen">
         <rosparam file="$(arg driver_config)" command="load" />
