@@ -26,13 +26,18 @@ RUN /opt/ros/noetic/setup.sh
 
 # Install ROS dependencies
 WORKDIR /ros/catkin_ws/
-
 RUN rosdep install --from-paths /ros/catkin_ws/src --ignore-src -y
+
+# Install OpenGV from source
+WORKDIR /ros/catkin_ws/src
+RUN git clone https://github.com/laurentkneip/opengv.git
+WORKDIR /ros/catkin_ws/src/opengv
+RUN mkdir build && cd build && cmake .. && make && make install
 
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON "
+    catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_OPENGV=ON"
 
 # Source the new packages
 RUN chmod +x /ros/catkin_ws/devel/setup.sh && /ros/catkin_ws/devel/setup.sh
@@ -45,5 +50,5 @@ ARG SPOT_VELODYNE=1
 ARG SPOT_USERNAME=admin
 ARG SPOT_PASSWORD=dummypassword
 
-ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh && \
-    roslaunch spot_navigation start.launch"
+#ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh && \
+#    roslaunch spot_navigation start.launch"

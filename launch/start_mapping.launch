@@ -1,5 +1,4 @@
 <launch>
-
     <!--
         <include file="$(find spot_driver)/launch/driver.launch">
             <arg name="username" default="dummyusername" />
