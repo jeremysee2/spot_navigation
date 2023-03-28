@@ -51,4 +51,5 @@ ARG SPOT_VELODYNE=1
 ARG SPOT_USERNAME=admin
 ARG SPOT_PASSWORD=dummypassword
 
-ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh"
+ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh && \
+    roslaunch spot_navigation start.launch"
