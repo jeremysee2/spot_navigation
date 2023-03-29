@@ -1,6 +1,5 @@
 import typing
 import numpy as np
-
 from geometry_msgs.msg import PoseStamped
 
 
@@ -47,7 +46,3 @@ class Fiducial:
                 ]
             )
         )
-
-
-if __name__ == "__main__":
-    pass

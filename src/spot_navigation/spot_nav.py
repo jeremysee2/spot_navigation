@@ -3,7 +3,6 @@ import typing
 import pickle
 import time
 
-import tf2_ros, tf2_geometry_msgs
 import rospy
 import actionlib
 from actionlib_msgs.msg import GoalStatus
@@ -104,33 +103,6 @@ class SpotNav:
                 f"fiducial: {fiducial.tag_id}\n position_x: {fiducial.fiducial_pose.pose.position.x:.2f}\n filtered_position_x: {fiducial.filtered_fiducial_pose.pose.position.x:.2f}"
             )
 
-    def initialize_tf2(self):
-        self.tf_buffer = tf2_ros.Buffer()
-        self.tf_listener = tf2_ros.TransformListener(self.tf_buffer)
-
-    def _transform_pose_to_body_frame(self, pose: PoseStamped) -> PoseStamped:
-        if pose.header.frame_id == "body":
-            return pose
-
-        if self.tf_buffer.can_transform(
-            "body", pose.header.frame_id, pose.header.stamp
-        ):
-            body_to_fixed = self.tf_buffer.lookup_transform(
-                "body",
-                pose.header.frame_id,
-                pose.header.stamp,  # rospy.Time() for latest
-            )
-        else:
-            rospy.logwarn(
-                f"Cannot transform from {pose.header.frame_id} to body frame. Returning original pose."
-            )
-            return pose
-
-        pose_in_body = tf2_geometry_msgs.do_transform_pose(pose, body_to_fixed)
-        pose_in_body.header.frame_id = "body"
-
-        return pose_in_body
-
     def call_service(self, service_name: str, *args, **kwargs):
         """Call a service and wait for it to be available"""
         try:
@@ -154,7 +126,7 @@ class SpotNav:
         navigate_init_goal = NavigateInitGoal(
             upload_path="",
             initial_localization_fiducial=True,
-            initial_localization_waypoint="le",
+            initial_localization_waypoint="mm",
         )
         self.navigate_init_client.send_goal(navigate_init_goal)
         self.navigate_init_client.wait_for_result()
@@ -269,7 +241,6 @@ class SpotNav:
         self.initialize_subscribers()
         self.initialize_publishers()
         self.initialize_action_clients()
-        self.initialize_tf2()
 
         rospy.on_shutdown(self.shutdown)
 
