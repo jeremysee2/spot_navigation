@@ -8,9 +8,9 @@ RUN mkdir -p /ros/catkin_ws/src
 WORKDIR /ros/catkin_ws/src
 # Get the secrets from Github Actions
 RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
-   export SPOTNAV_GIT_BRANCH=$(cat /run/secrets/SPOTNAV_GIT_BRANCH) && \
-   echo $SPOTNAV_GIT_BRANCH && \
-   git clone -b $SPOTNAV_GIT_BRANCH https://github.com/jeremysee2/spot_navigation.git /ros/catkin_ws/src/spot_navigation
+    export SPOTNAV_GIT_BRANCH=$(cat /run/secrets/SPOTNAV_GIT_BRANCH) && \
+    echo $SPOTNAV_GIT_BRANCH && \
+    git clone -b $SPOTNAV_GIT_BRANCH https://github.com/jeremysee2/spot_navigation.git /ros/catkin_ws/src/spot_navigation
 
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
 
@@ -37,6 +37,8 @@ RUN mkdir build && cd build && cmake .. && make && make install
 
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
+RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
+    catkin_make --only-pkg-with-deps spot_driver"
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
     catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_OPENGV=ON"
 
