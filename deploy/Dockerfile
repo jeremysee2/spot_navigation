@@ -56,5 +56,4 @@ ARG SPOT_REAL_DATA=0
 
 ARG ROS_MASTER_URI=http://localhost:21311
 
-ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh && \
-    roslaunch spot_navigation start.launch"
+ENTRYPOINT /ros/catkin_ws/src/spot_navigation/deploy/entrypoint.sh
