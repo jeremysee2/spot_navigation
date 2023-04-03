@@ -1,11 +1,13 @@
 <launch>
-    <!--
+    <arg name="real_data" default="true"/>
+
+    <group if="$(arg real_data)">
         <include file="$(find spot_driver)/launch/driver.launch">
             <arg name="username" default="dummyusername" />
             <arg name="password" default="dummypassword" />
             <arg name="hostname" default="192.168.80.3" />
         </include>
-    -->
+    </group>
 
     <!-- Start the World Object to AprilTag node -->
     <node pkg="spot_navigation" type="worldobj_apriltag.py" name="worldobj_apriltag" ns="worldobj_apriltag" output="screen">
@@ -21,4 +23,7 @@
     <!-- Start the RTABMap navigation stack -->
     <include file="$(find spot_navigation)/launch/rtabmap_spot.launch">
     </include>
+
+    <!-- Start the move_base navigation node -->
+    <include file="$(find spot_navigation)/launch/move_base.launch">
 </launch>
