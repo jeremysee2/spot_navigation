@@ -18,6 +18,8 @@ find_package(catkin REQUIRED COMPONENTS
   tf2_msgs
   move_base
   nav_msgs
+  costmap_2d
+  apriltag_ros
 )
 
 ## System dependencies are found with CMake's conventions

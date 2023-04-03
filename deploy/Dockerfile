@@ -16,7 +16,7 @@ RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot
 
 RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet \
     ros-noetic-roslint ros-noetic-pcl-ros ros-noetic-catkin python3-catkin-pkg ros-noetic-tf2-tools nano \
-    ros-noetic-octomap ros-noetic-octomap-mapping ros-noetic-navigation
+    ros-noetic-octomap ros-noetic-octomap-mapping ros-noetic-navigation ros-noetic-apriltag ufw net-tools
 
 # Install RTABMap ROS from source
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
@@ -52,6 +52,8 @@ ARG SPOT_LIDAR_MOUNT=1
 ARG SPOT_VELODYNE=1
 ARG SPOT_USERNAME=admin
 ARG SPOT_PASSWORD=dummypassword
+
+ARG ROS_MASTER_URI=http://localhost:21311
 
 ENTRYPOINT /bin/bash -c "source /ros/catkin_ws/devel/setup.sh && \
     roslaunch spot_navigation start.launch"

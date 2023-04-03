@@ -7,6 +7,10 @@
         </include>
     -->
 
+    <!-- Start the World Object to AprilTag node -->
+    <node pkg="spot_navigation" type="worldobj_apriltag.py" name="worldobj_apriltag" ns="worldobj_apriltag" output="screen">
+    </node>
+
     <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
 
     <!-- Start the Spot Navigation logging node -->
