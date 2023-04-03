@@ -1,0 +1,9 @@
+# http://www.ros.org/wiki/costmap_2d
+
+obstacle_range: 2.5
+raytrace_range: 5.0
+footprint: [[0.28, 0.56], [0.28, -0.56], [-0.28, -0.56], [-0.28, 0.56]]
+robot_radius: 0.3
+inflation_radius: 0.3
+observation_sources: point_cloud_sensor
+point_cloud_sensor: {sensor_frame: /base_link, data_type: PointCloud2, topic: /spot/lidar/points, marking: true, clearing: true}
