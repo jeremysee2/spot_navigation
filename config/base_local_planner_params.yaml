@@ -36,3 +36,13 @@ TrajectoryPlannerROS:
   yaw_goal_tolerance: 0.1
   trans_stopped_velocity: 0.1
   rot_stopped_velocity: 0.1
+  cost_scaling_factor: 10.0
+  forward_point_distance: 0.325
+  stop_time_buffer: 0.2
+  max_trans_vel: 0.5
+  min_trans_vel: 0.1
+  max_scaling_factor: 0.2
+  min_scaling_factor: 0.01
+  clearing_radius: 0.6
+  obstacle_range: 2.5
+  raytrace_range: 3.0
