@@ -1,6 +1,6 @@
 import typing
 import numpy as np
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, PoseWithCovariance
 
 
 class Fiducial:
@@ -15,7 +15,7 @@ class Fiducial:
         dim_y: float,
         fiducial_pose: PoseStamped,
         filtered_fiducial_pose: PoseStamped,
-        pose_covariance: typing.Optional[typing.List[float]] = None,
+        pose_covariance: typing.Optional[PoseWithCovariance] = None,
         pose_covariance_frame: typing.Optional[str] = None,
     ):
         # Save variables to class
