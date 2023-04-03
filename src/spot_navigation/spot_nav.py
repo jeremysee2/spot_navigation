@@ -222,6 +222,7 @@ class SpotNav:
 
         # Call the /spot/sit, /spot/power_off, /spot/release service
         self.call_service("/spot/sit", TriggerRequest())
+        time.sleep(5)
         self.call_service("/spot/power_off", TriggerRequest())
         self.call_service("/spot/release", TriggerRequest())
 
