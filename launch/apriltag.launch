@@ -1,5 +1,5 @@
 <launch>
-  <node name="apriltag_detector_left" pkg="apriltag_ros" type="apriltag_detector_node" output="screen">
+  <node name="apriltag_detector_left" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
     <remap from="/camera_rect/image_rect" to="/spot/camera/left/image"/>
     <remap from="/camera_rect/camera_info" to="/spot/camera/left/camera_info"/>
     <remap from="tag_detections" to="/left/tag_detections"/>
@@ -7,9 +7,11 @@
     <param name="tag_family" value="tag36h11"/>
     <param name="tag_size" value="0.146"/>
     <param name="publish_detections_image" value="false"/>
+    <param name="publish_tf" value="true"/>
+    <param name="queue_size" type="int" value="5" />
   </node>
 
-  <node name="apriltag_detector_right" pkg="apriltag_ros" type="apriltag_detector_node" output="screen">
+  <node name="apriltag_detector_right" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
     <remap from="/camera_rect/image_rect" to="/spot/camera/right/image"/>
     <remap from="/camera_rect/camera_info" to="/spot/camera/right/camera_info"/>
     <remap from="tag_detections" to="/right/tag_detections"/>
@@ -17,6 +19,8 @@
     <param name="tag_family" value="tag36h11"/>
     <param name="tag_size" value="0.146"/>
     <param name="publish_detections_image" value="false"/>
+    <param name="publish_tf" value="true"/>
+    <param name="queue_size" type="int" value="5" />
   </node>
 
 </launch>
