@@ -1,5 +1,6 @@
 <launch>
     <arg name="real_data" default="true"/>
+    <arg name="use_apriltag" default="true"/>
     <arg name="username"  default="dummyusername" />
     <arg name="password"  default="dummypassword" />
     <arg name="hostname"  default="192.168.80.3" />
@@ -12,9 +13,10 @@
         </include>
     </group>
 
-    <!-- Start the World Object to AprilTag node -->
-    <node pkg="spot_navigation" type="worldobj_apriltag.py" name="worldobj_apriltag" ns="worldobj_apriltag" output="screen">
-    </node>
+    <!-- Start the AprilTag node -->
+    <group if="$(arg use_apriltag)">
+        <include file="$(find spot_navigation)/launch/apriltag.launch"/>
+    </group>
 
     <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
 
