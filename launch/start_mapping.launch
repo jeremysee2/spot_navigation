@@ -1,11 +1,14 @@
 <launch>
     <arg name="real_data" default="true"/>
+    <arg name="username"  default="dummyusername" />
+    <arg name="password"  default="dummypassword" />
+    <arg name="hostname"  default="192.168.80.3" />
 
     <group if="$(arg real_data)">
         <include file="$(find spot_driver)/launch/driver.launch">
-            <arg name="username" default="dummyusername" />
-            <arg name="password" default="dummypassword" />
-            <arg name="hostname" default="192.168.80.3" />
+            <arg name="username" default="$(arg username)" />
+            <arg name="password" default="$(arg password)" />
+            <arg name="hostname" default="$(arg hostname)" />
         </include>
     </group>
 
@@ -15,13 +18,10 @@
 
     <arg name="driver_config" default="$(find spot_navigation)/config/spot_nav.yaml"/>
 
-    <!-- Start the Spot Navigation logging node -->
-    <node pkg="spot_navigation" type="spot_nav.py" name="spot_nav" ns="nav_app" output="screen">
-        <rosparam file="$(arg driver_config)" command="load" />
-    </node>
-
     <!-- Start the RTABMap navigation stack -->
     <include file="$(find spot_navigation)/launch/rtabmap_spot.launch">
         <param name="rtabmap_args" type="string" value="--delete_db_on_start" />
     </include>
+
+    <include file="$(find spot_navigation)/launch/move_base.launch">
 </launch>
