@@ -23,5 +23,5 @@
     </include>
 
     <!-- Start the move_base navigation node -->
-    <include file="$(find spot_navigation)/launch/move_base.launch">
+    <include file="$(find spot_navigation)/launch/move_base.launch"/>
 </launch>

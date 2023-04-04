@@ -23,5 +23,5 @@
         <param name="rtabmap_args" type="string" value="--delete_db_on_start" />
     </include>
 
-    <include file="$(find spot_navigation)/launch/move_base.launch">
+    <include file="$(find spot_navigation)/launch/move_base.launch"/>
 </launch>
