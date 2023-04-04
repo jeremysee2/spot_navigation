@@ -1,5 +1,5 @@
 <launch>
-  <arg name="map_file" default="rtabmap-walk2.pgm"/>
+  <arg name="map_file" default="4Apr-rtabmap.pgm"/>
 
   <node name="map_server" pkg="map_server" type="map_server" args="$(find spot_navigation)/maps/$(arg map_file)">
     <param name="frame_id" value="/map"/>
