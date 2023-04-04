@@ -57,4 +57,7 @@ ARG SPOT_REAL_DATA=True
 
 ARG ROS_MASTER_URI=http://localhost:21311
 
+# Setup VNC
+ENV DISPLAY :20
+
 ENTRYPOINT /ros/catkin_ws/src/spot_navigation/deploy/entrypoint.sh
