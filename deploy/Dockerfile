@@ -41,7 +41,7 @@ WORKDIR /ros/catkin_ws/
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
     catkin_make --only-pkg-with-deps spot_driver"
 RUN /bin/bash -c "source /opt/ros/noetic/setup.bash && \
-    catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_OPENGV=ON --only-pkg-with-deps spot_navigation rtabmap_ros"
+    catkin_make -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_OPENGV=ON --only-pkg-with-deps spot_navigation rtabmap_ros spot_viz spot_description"
 
 # Source the new packages
 RUN chmod +x /ros/catkin_ws/devel/setup.sh && /ros/catkin_ws/devel/setup.sh
