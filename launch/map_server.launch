@@ -1,0 +1,10 @@
+<launch>
+  <arg name="map_file" default="rtabmap-walk2.pgm"/>
+
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find spot_navigation)/maps/$(arg map_file)">
+    <param name="frame_id" value="/map"/>
+    <param name="resolution" value="0.05"/>
+    <param name="occupied_thresh" value="0.65"/>
+    <param name="free_thresh" value="0.196"/>
+  </node>
+</launch>
