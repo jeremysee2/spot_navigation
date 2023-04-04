@@ -1,4 +1,4 @@
-FROM ros:noetic
+FROM ros:noetic-desktop-full
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
 RUN DEBIAN_FRONTEND=noninteractive apt install -y git
