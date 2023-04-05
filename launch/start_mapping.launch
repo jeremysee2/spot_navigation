@@ -26,4 +26,7 @@
     </include>
 
     <include file="$(find spot_navigation)/launch/move_base.launch"/>
+
+    <!-- Start the RViz with view_map.launch -->
+    <include file="$(find spot_navigation)/launch/view_map.launch"/>
 </launch>
