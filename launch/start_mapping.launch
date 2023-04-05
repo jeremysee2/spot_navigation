@@ -5,6 +5,8 @@
     <arg name="password"  default="dummypassword" />
     <arg name="hostname"  default="192.168.80.3" />
 
+    <arg name="delete_db" default="true"/>
+
     <group if="$(arg real_data)">
         <include file="$(find spot_driver)/launch/driver.launch">
             <arg name="username" default="$(arg username)" />
@@ -22,7 +24,9 @@
 
     <!-- Start the RTABMap navigation stack -->
     <include file="$(find spot_navigation)/launch/rtabmap_spot.launch">
-        <param name="rtabmap_args" type="string" value="--delete_db_on_start" />
+        <group if="$(arg delete_db)">
+            <param name="rtabmap_args" type="string" value="--delete_db_on_start" />
+        </group>
     </include>
 
     <include file="$(find spot_navigation)/launch/move_base.launch"/>
