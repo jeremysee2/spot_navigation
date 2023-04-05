@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$START_VNC_SERVER" == "true" ]
+if [ "$START_VNC_SERVER" == "true" ]; then
     export DISPLAY=:20
     Xvfb :20 -screen 0 1920x1080x16 &
     x11vnc -passwd 1234 -display :20 -N -forever -rfbport 21800 &
