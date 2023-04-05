@@ -3,6 +3,7 @@ import typing
 import numpy as np
 from fiducial import Fiducial
 from spot_msgs.msg import WorldObjectArray, WorldObject
+import glob
 
 
 def read_fiducial_pickle(path: str):
@@ -68,7 +69,20 @@ def read_waypoint_fiducial_pickle(path: str):
         print(f"Total waypoints: {len(fiducials)}")
 
 
+def read_door_demo_fiducial_pickle(path: str):
+    with open(path, "rb") as f:
+        fiducials: typing.Dict[str, typing.List["Fiducial"]] = pickle.load(f)
+
+        for fiducial in fiducials:
+            print(f"Detected: {fiducial.tag_id}")
+            print(fiducial.fiducial_pose)
+
+
 if __name__ == "__main__":
-    path = "dir_path_here"
-    read_waypoint_fiducial_pickle(f"{path}/waypoint_fiducial.pickle")
-    read_fiducial_pickle(f"{path}/fiducials_seen.pickle")
+    path = "/com.docker.devenvironments.code/catkin_ws/src/spot_navigation/src/spot_navigation/"
+    # read_waypoint_fiducial_pickle(f"{path}/waypoint_fiducial.pickle")
+    # read_fiducial_pickle(f"{path}/fiducials_seen.pickle")
+
+    end_fiducial_files = glob.glob(path + "end_fiducial.pickle*")
+    for p in end_fiducial_files:
+        read_door_demo_fiducial_pickle(p)
