@@ -7,6 +7,8 @@
     <rosparam file="$(find spot_navigation)/config/global_costmap_params.yaml" command="load" />
     <rosparam file="$(find spot_navigation)/config/local_costmap_params.yaml" command="load" />
     <rosparam file="$(find spot_navigation)/config/base_local_planner_params.yaml" command="load" />
+
+    <remap from="cmd_vel" to="/spot/cmd_vel"/>
   </node>
 
 </launch>
