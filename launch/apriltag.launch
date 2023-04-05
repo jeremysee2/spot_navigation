@@ -30,6 +30,7 @@
     <param name="publish_detections_image" value="false"/>
     <param name="publish_tf" value="true"/>
     <param name="queue_size" type="int" value="5" />
+  </node>
 
   <!-- Frontleft -->
   <node name="apriltag_detector_frontleft" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
@@ -40,6 +41,7 @@
     <param name="publish_detections_image" value="false"/>
     <param name="publish_tf" value="true"/>
     <param name="queue_size" type="int" value="5" />
+  </node>
 
   <!-- Frontright -->
   <node name="apriltag_detector_frontright" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
@@ -50,5 +52,6 @@
     <param name="publish_detections_image" value="false"/>
     <param name="publish_tf" value="true"/>
     <param name="queue_size" type="int" value="5" />
+  </node>
 
 </launch>
