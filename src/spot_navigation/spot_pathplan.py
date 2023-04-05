@@ -15,6 +15,7 @@ import rtabmap_ros
 from rtabmap_ros.srv import GetMap, GetMapRequest, GetMapResponse
 from rtabmap_ros.srv import SetGoal, SetGoalRequest, SetGoalResponse
 from rtabmap_ros.srv import ListLabelsRequest, ListLabelsResponse
+from rtabmap_ros.srv import SetLabelRequest, SetLabelResponse
 from rtabmap_ros.msg import MapData, NodeData
 
 
@@ -97,6 +98,13 @@ class SpotPathPlan(object):
         resp: ListLabelsResponse = self.call_service("/rtabmap/list_labels")
         labels: typing.List[str] = resp.labels
         return labels
+
+    def set_label(self, node_id: int, label: str):
+        # Call the /rtabmap/set_label service
+        req = SetLabelRequest()
+        req.node_id = node_id
+        req.node_label = label
+        self.call_service("/rtabmap/set_label", req)
 
     def main(self):
         rospy.init_node("spot_pathplan")
