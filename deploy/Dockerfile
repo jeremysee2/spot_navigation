@@ -21,11 +21,29 @@ RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev r
 
 RUN DEBIAN_FRONTEND=noninteractive apt remove -y ros-noetic-rtabmap ros-noetic-rtabmap-ros
 
+# Install OpenGV from source
+WORKDIR /ros/catkin_ws/src
+RUN git clone https://github.com/laurentkneip/opengv.git /ros/opengv && \
+    cd /ros/opengv && \
+    git checkout 91f4b19c73450833a40e463ad3648aae80b3a7f3 && \
+    wget https://gist.githubusercontent.com/matlabbe/a412cf7c4627253874f81a00745a7fbb/raw/accc3acf465d1ffd0304a46b17741f62d4d354ef/opengv_disable_march_native.patch && \
+    git apply opengv_disable_march_native.patch && \
+    mkdir build && \
+    cd build && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    make -j$(nproc) && \
+    make install
+
+# Install GTSAM
+RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:borglab/gtsam-release-4.0 -y
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt install libgtsam-dev libgtsam-unstable-dev -y && \
+    apt-get clean && rm -rf /var/lib/apt/lists/
+
 # Install RTABMap from source
 WORKDIR /ros
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap.git /ros/rtabmap
-RUN cd rtabmap/build && \
-    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON -DRTABMAP_SYNC_MULTI_RGBD=ON .. && \
+RUN cd /ros/rtabmap/build && \
+    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON _DWITH_G2O=YES -DWITH_GTSAM=YES .. && \
     make -j$(nproc) && \
     make install && \
     cd ../.. && \
@@ -42,19 +60,6 @@ RUN /opt/ros/noetic/setup.sh
 # Install ROS dependencies
 WORKDIR /ros/catkin_ws/
 RUN rosdep install --from-paths /ros/catkin_ws/src --ignore-src -y
-
-# Install OpenGV from source
-WORKDIR /ros/catkin_ws/src
-RUN git clone https://github.com/laurentkneip/opengv.git && \
-    cd opengv && \
-    git checkout 91f4b19c73450833a40e463ad3648aae80b3a7f3 && \
-    wget https://gist.githubusercontent.com/matlabbe/a412cf7c4627253874f81a00745a7fbb/raw/accc3acf465d1ffd0304a46b17741f62d4d354ef/opengv_disable_march_native.patch && \
-    git apply opengv_disable_march_native.patch && \
-    mkdir build && \
-    cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
-    make -j$(nproc) && \
-    make install
 
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
