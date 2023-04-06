@@ -1,57 +1,54 @@
 <launch>
   <!-- Left -->
   <node name="apriltag_detector_left" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
-    <remap from="/camera_rect/image_rect" to="/spot/camera/left/image"/>
-    <remap from="/camera_rect/camera_info" to="/spot/camera/left/camera_info"/>
-    <param name="tag_family" value="tag36h11"/>
-    <param name="tag_size" value="0.146"/>
-    <param name="publish_detections_image" value="false"/>
-    <param name="publish_tf" value="true"/>
-    <param name="queue_size" type="int" value="5" />
+    <remap from="/image_rect" to="/spot/camera/left/image"/>
+    <remap from="/camera_info" to="/spot/camera/left/camera_info"/>
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_settings.yaml"/>
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_tags.yaml"/>
   </node>
 
   <!-- Right -->
   <node name="apriltag_detector_right" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
-    <remap from="/camera_rect/image_rect" to="/spot/camera/right/image"/>
-    <remap from="/camera_rect/camera_info" to="/spot/camera/right/camera_info"/>
-    <param name="tag_family" value="tag36h11"/>
-    <param name="tag_size" value="0.146"/>
-    <param name="publish_detections_image" value="false"/>
-    <param name="publish_tf" value="true"/>
-    <param name="queue_size" type="int" value="5" />
+    <remap from="/image_rect" to="/spot/camera/right/image"/>
+    <remap from="/camera_info" to="/spot/camera/right/camera_info"/>
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_settings.yaml"/>
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_tags.yaml"/>
   </node>
 
   <!-- Back -->
   <node name="apriltag_detector_back" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
-    <remap from="/camera_rect/image_rect" to="/spot/camera/back/image"/>
-    <remap from="/camera_rect/camera_info" to="/spot/camera/back/camera_info"/>
-    <param name="tag_family" value="tag36h11"/>
-    <param name="tag_size" value="0.146"/>
-    <param name="publish_detections_image" value="false"/>
-    <param name="publish_tf" value="true"/>
-    <param name="queue_size" type="int" value="5" />
+    <remap from="/image_rect" to="/spot/camera/back/image"/>
+    <remap from="/camera_info" to="/spot/camera/back/camera_info"/>
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_settings.yaml"/>
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_tags.yaml"/>
   </node>
 
   <!-- Frontleft -->
   <node name="apriltag_detector_frontleft" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
-    <remap from="/camera_rect/image_rect" to="/spot/camera/frontleft/image"/>
-    <remap from="/camera_rect/camera_info" to="/spot/camera/frontleft/camera_info"/>
-    <param name="tag_family" value="tag36h11"/>
-    <param name="tag_size" value="0.146"/>
-    <param name="publish_detections_image" value="false"/>
-    <param name="publish_tf" value="true"/>
-    <param name="queue_size" type="int" value="5" />
+    <remap from="/image_rect" to="/spot/camera/frontleft/image"/>
+    <remap from="/camera_info" to="/spot/camera/frontleft/camera_info"/>
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_settings.yaml"/>
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_tags.yaml"/>
   </node>
 
   <!-- Frontright -->
   <node name="apriltag_detector_frontright" pkg="apriltag_ros" type="apriltag_ros_continuous_node" output="screen">
-    <remap from="/camera_rect/image_rect" to="/spot/camera/frontright/image"/>
-    <remap from="/camera_rect/camera_info" to="/spot/camera/frontright/camera_info"/>
-    <param name="tag_family" value="tag36h11"/>
-    <param name="tag_size" value="0.146"/>
-    <param name="publish_detections_image" value="false"/>
-    <param name="publish_tf" value="true"/>
-    <param name="queue_size" type="int" value="5" />
+    <remap from="/image_rect" to="/spot/camera/frontright/image"/>
+    <remap from="/camera_info" to="/spot/camera/frontright/camera_info"/>
+
+    <!-- load parameters (incl. tag family, tags, etc.) -->
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_settings.yaml"/>
+    <rosparam command="load" file="$(find spot_navigation)/config/apriltag_tags.yaml"/>
   </node>
+
+
 
 </launch>
