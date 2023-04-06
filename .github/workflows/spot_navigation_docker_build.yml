@@ -32,3 +32,4 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/spot_navigation:${{ steps.extract_branch.outputs.branch }}
           secrets: |
             "SPOTNAV_GIT_BRANCH=${{ steps.extract_branch.outputs.branch }}"
+          platforms: linux/amd64,linux/arm64
