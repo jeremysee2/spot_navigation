@@ -14,6 +14,8 @@ RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
 
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
 
+RUN DEBIAN_FRONTEND=noninteractive apt update
+
 RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet \
     ros-noetic-roslint ros-noetic-pcl-ros ros-noetic-catkin python3-catkin-pkg ros-noetic-tf2-tools nano \
     ros-noetic-octomap ros-noetic-octomap-mapping ros-noetic-navigation ros-noetic-apriltag ufw net-tools \
