@@ -66,7 +66,7 @@ class SpotPathPlan(object):
         req.global_ = True
         req.optimized = True
         req.graph_only = False
-        map_data: GetMapResponse = self.call_service("/rtabmap/get_map", req)
+        map_data: GetMapResponse = self.call_service("/get_map", req)
 
         # Extract the graph and poses from the map
         waypoints = self.map_data_callback(map_data)
@@ -78,7 +78,7 @@ class SpotPathPlan(object):
         # Set the goal
         goal = SetGoalRequest()
         goal.node_id = goal_id
-        resp: SetGoalResponse = self.call_service("/rtabmap/set_goal", goal)
+        resp: SetGoalResponse = self.call_service("/set_goal", goal)
 
         # Print the result
         path_ids = resp.path_ids
@@ -90,21 +90,21 @@ class SpotPathPlan(object):
         rospy.loginfo("Planning Time: {}".format(planning_time))
 
     def backup_map(self):
-        # Call the /rtabmap/backup service
-        self.call_service("/rtabmap/backup_database")
+        # Call the /backup service
+        self.call_service("/backup")
 
     def list_labels(self) -> typing.List[str]:
-        # Call the /rtabmap/list_labels service
-        resp: ListLabelsResponse = self.call_service("/rtabmap/list_labels")
+        # Call the /list_labels service
+        resp: ListLabelsResponse = self.call_service("/list_labels")
         labels: typing.List[str] = resp.labels
         return labels
 
     def set_label(self, node_id: int, label: str):
-        # Call the /rtabmap/set_label service
+        # Call the /set_label service
         req = SetLabelRequest()
         req.node_id = node_id
         req.node_label = label
-        self.call_service("/rtabmap/set_label", req)
+        self.call_service("/set_label", req)
 
     def main(self):
         rospy.init_node("spot_pathplan")
