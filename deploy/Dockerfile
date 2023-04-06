@@ -17,7 +17,7 @@ RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot
 RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet \
     ros-noetic-roslint ros-noetic-pcl-ros ros-noetic-catkin python3-catkin-pkg ros-noetic-tf2-tools nano \
     ros-noetic-octomap ros-noetic-octomap-mapping ros-noetic-navigation ros-noetic-apriltag ufw net-tools \
-    ros-noetic-rtabmap ros-noetic-libpointmatcher ros-noetic-libg2o x11vnc xvfb firefox iputils-ping wget software-properties-common
+    ros-noetic-rtabmap ros-noetic-libpointmatcher ros-noetic-libg2o x11vnc xvfb firefox iputils-ping wget
 
 RUN DEBIAN_FRONTEND=noninteractive apt remove -y ros-noetic-rtabmap ros-noetic-rtabmap-ros
 
@@ -34,16 +34,11 @@ RUN git clone https://github.com/laurentkneip/opengv.git /ros/opengv && \
     make -j$(nproc) && \
     make install
 
-# Install GTSAM
-RUN DEBIAN_FRONTEND=noninteractive add-apt-repository ppa:borglab/gtsam-release-4.0 -y
-RUN DEBIAN_FRONTEND=noninteractive apt-get update && apt install libgtsam-dev libgtsam-unstable-dev -y && \
-    apt-get clean && rm -rf /var/lib/apt/lists/
-
 # Install RTABMap from source
 WORKDIR /ros
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap.git /ros/rtabmap
 RUN cd /ros/rtabmap/build && \
-    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON _DWITH_G2O=YES -DWITH_GTSAM=YES .. && \
+    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON _DWITH_G2O=YES .. && \
     make -j$(nproc) && \
     make install && \
     cd ../.. && \
@@ -59,7 +54,7 @@ RUN /opt/ros/noetic/setup.sh
 
 # Install ROS dependencies
 WORKDIR /ros/catkin_ws/
-RUN rosdep install --from-paths /ros/catkin_ws/src --ignore-src -y
+RUN rosdep install --from-paths src --ignore-src -y
 
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
