@@ -57,6 +57,7 @@ RUN /opt/ros/noetic/setup.sh
 # Install ROS dependencies
 WORKDIR /ros/catkin_ws/
 RUN rosdep install --from-paths src --ignore-src -y
+RUN DEBIAN_FRONTEND=noninteractive apt remove -y ros-noetic-rtabmap ros-noetic-rtabmap-ros
 
 # Build ROS packages, remember to source the setup.bash file in the same command
 WORKDIR /ros/catkin_ws/
