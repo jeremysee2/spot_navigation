@@ -98,10 +98,10 @@
     Reg/Strategy=1: loop closure is computed with visual->icp (visual gives the rough guess to ICP), but proximity detection and neighbor refining are ICP only based on guess from odometry.
     Reg/Strategy=2: loop closure, proximity detection and neighbot refining are computed with visual->icp (visual gives the rough guess to ICP) -->
 
-      <param name="RGBD/OptimizeStrategy" type="string" value="1"/> <!-- g2o=1, GTSAM=2 -->
-      <param name="RGBD/OptimizeRobust" type="string" value="true"/>
+      <param name="Optimizer/Strategy" type="string" value="1"/> <!-- g2o=1, GTSAM=2 -->
+      <param name="Optimizer/Robust" type="string" value="true"/>
       <param name="RGBD/OptimizeMaxError" type="string" value="0"/> <!-- should be 0 if RGBD/OptimizeRobust is true -->
-
+      <param name="RGBD/ProximityPathMaxNeighbors" type="string" value="1"/>
       
       <!-- ICP parameters -->
       <param name="Icp/VoxelSize"                 type="string" value="0.05"/>
