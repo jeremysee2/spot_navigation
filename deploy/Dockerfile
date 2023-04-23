@@ -1,7 +1,7 @@
 FROM osrf/ros:noetic-desktop-full
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y git
+RUN DEBIAN_FRONTEND=noninteractive apt install -y git python3-pip
 
 # Download the Spot ROS packages
 RUN mkdir -p /ros/catkin_ws/src
