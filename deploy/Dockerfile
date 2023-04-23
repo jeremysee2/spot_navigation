@@ -14,6 +14,12 @@ RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
 
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
 
+# Install spot_wrapper
+RUN git clone https://github.com/jeremysee2/spot_wrapper.git /ros/catkin_ws/src/spot_ros/spot_wrapper && \
+    cd /ros/catkin_ws/src/spot_ros/spot_wrapper && \
+    pip install -r requirements.txt && \
+    pip install -e .
+
 RUN DEBIAN_FRONTEND=noninteractive apt update
 
 RUN DEBIAN_FRONTEND=noninteractive apt install -y python3-pip git qttools5-dev ros-noetic-tf2-bullet \
@@ -48,7 +54,8 @@ RUN cd /ros/rtabmap/build && \
     ldconfig
 
 # Install RTABMap ROS from source
-RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
+RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros && \
+    git checkout -b 46c2988e
 
 RUN python3 -m pip install cython bosdyn-client bosdyn-mission bosdyn-api bosdyn-core empy numpy
 RUN chmod +x /opt/ros/noetic/setup.sh
