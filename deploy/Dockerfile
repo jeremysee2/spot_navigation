@@ -40,7 +40,7 @@ RUN git clone https://github.com/laurentkneip/opengv.git /ros/opengv && \
 WORKDIR /ros
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap.git /ros/rtabmap
 RUN cd /ros/rtabmap/build && \
-    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON _DWITH_G2O=YES .. && \
+    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_G2O=YES .. && \
     make -j$(nproc) && \
     make install && \
     cd ../.. && \
