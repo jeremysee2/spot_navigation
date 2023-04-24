@@ -55,6 +55,7 @@ RUN cd /ros/rtabmap/build && \
 
 # Install RTABMap ROS from source
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros && \
+    cd /ros/catkin_ws/src/rtabmap_ros && \
     git checkout -b 46c2988e
 
 RUN python3 -m pip install cython bosdyn-client bosdyn-mission bosdyn-api bosdyn-core empy numpy
