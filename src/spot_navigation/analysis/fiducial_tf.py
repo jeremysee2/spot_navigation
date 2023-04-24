@@ -18,14 +18,16 @@ import tf2_geometry_msgs
 from tf import transformations as ts
 
 # Add ROS packages to the path
-sys.path.append('/com.docker.devenvironments.code/catkin_ws/devel/lib/python3/dist-packages')
-sys.path.append('/opt/ros/noetic/lib/python3/dist-packages/')
+sys.path.append(
+    "/com.docker.devenvironments.code/catkin_ws/devel/lib/python3/dist-packages"
+)
+sys.path.append("/opt/ros/noetic/lib/python3/dist-packages/")
 
 import fiducial
 
+
 class FiducialTF:
-    """ROS node to transform all data to the /body frame
-    """
+    """ROS node to transform all data to the /body frame"""
 
     def __init__(self):
         self.sensors_static_transforms = []
@@ -36,40 +38,43 @@ class FiducialTF:
         self.transform_broadcaster = tf2_ros.TransformBroadcaster()
 
     def invertTf(self, x, y, z, qx, qy, qz, qw):
-        transform = ts.concatenate_matrices(ts.translation_matrix([x,y,z]), ts.quaternion_matrix([qx,qy,qz,qw]))
+        transform = ts.concatenate_matrices(
+            ts.translation_matrix([x, y, z]), ts.quaternion_matrix([qx, qy, qz, qw])
+        )
         inversed_transform = ts.inverse_matrix(transform)
-        return ts.translation_from_matrix(inversed_transform), ts.quaternion_from_matrix(inversed_transform)
+        return ts.translation_from_matrix(
+            inversed_transform
+        ), ts.quaternion_from_matrix(inversed_transform)
 
-    def populateStaticTf(self, x, y, z, qx, qy, qz, qw, frame_id, child_frame_id, header_seq, header_stamp_s, header_stamp_ns):
+    def populateStaticTf(
+        self,
+        x,
+        y,
+        z,
+        qx,
+        qy,
+        qz,
+        qw,
+        frame_id,
+        child_frame_id,
+        header_seq,
+        header_stamp_s,
+        header_stamp_ns,
+    ):
         tf_time = rospy.Time(secs=header_stamp_s, nsecs=header_stamp_ns)
 
         static_tf = TransformStamped(
-            header=Header(
-                seq=header_seq,
-                frame_id=frame_id,
-                stamp=tf_time
-            ),
+            header=Header(seq=header_seq, frame_id=frame_id, stamp=tf_time),
             child_frame_id=child_frame_id,
             transform=Transform(
-                translation=Vector3(
-                    x=x,
-                    y=y,
-                    z=z
-                ),
-                rotation=Quaternion(
-                    x=qx,
-                    y=qy,
-                    z=qz,
-                    w=qw
-                )
-            )
+                translation=Vector3(x=x, y=y, z=z),
+                rotation=Quaternion(x=qx, y=qy, z=qz, w=qw),
+            ),
         )
         self.sensors_static_transforms.append(static_tf)
 
     def broadcastStaticTf(self):
-        self.transform_broadcaster.sendTransform(
-            self.sensors_static_transforms
-        )
+        self.transform_broadcaster.sendTransform(self.sensors_static_transforms)
 
     def _transform_pose_to_body_frame(self, pose: PoseStamped) -> PoseStamped:
         """
@@ -94,35 +99,34 @@ class FiducialTF:
         pose_in_body.header.frame_id = "body"
 
         return pose_in_body
-    
-    def read_pickle(self, indoor = True):
-        """Reads the pickle file and returns the data
-        """
-        test_data_path = '/com.docker.devenvironments.code/test_data/'
+
+    def read_pickle(self, indoor=True):
+        """Reads the pickle file and returns the data"""
+        test_data_path = "/com.docker.devenvironments.code/test_data/"
 
         # Set the path to the data for all 3 walks
         fid_path_indoor = [
-            test_data_path + 'walk2/fid-walk2.pickle',
-            test_data_path + 'walk3/fid-walk3.pickle',
-            test_data_path + 'walk4/fid-walk4.pickle'
+            test_data_path + "walk2/fid-walk2.pickle",
+            test_data_path + "walk3/fid-walk3.pickle",
+            test_data_path + "walk4/fid-walk4.pickle",
         ]
 
         way_fid_path_indoor = [
-            test_data_path + '27Mar/walk2/way-walk2.pickle',
-            test_data_path + '27Mar/walk3/way-walk3.pickle',
-            test_data_path + '27Mar/walk4/way-walk4.pickle'
+            test_data_path + "27Mar/walk2/way-walk2.pickle",
+            test_data_path + "27Mar/walk3/way-walk3.pickle",
+            test_data_path + "27Mar/walk4/way-walk4.pickle",
         ]
 
         fid_path_outdoor = [
-            test_data_path + '28Mar/fid1.pickle',
-            test_data_path + '28Mar/fid2.pickle',
-            test_data_path + '28Mar/fid3.pickle'
+            test_data_path + "28Mar/fid1.pickle",
+            test_data_path + "28Mar/fid2.pickle",
+            test_data_path + "28Mar/fid3.pickle",
         ]
 
         way_fid_path_outdoor = [
-            test_data_path + '28Mar/way1.pickle',
-            test_data_path + '28Mar/way2.pickle',
-            test_data_path + '28Mar/way3.pickle'
+            test_data_path + "28Mar/way1.pickle",
+            test_data_path + "28Mar/way2.pickle",
+            test_data_path + "28Mar/way3.pickle",
         ]
 
         if indoor:
@@ -137,7 +141,7 @@ class FiducialTF:
         # Load the data
         way_fid_data = []
         for p in way_fid_path:
-            with open(p, 'rb') as f:
+            with open(p, "rb") as f:
                 way_fid_data.append(pickle.load(f))
 
         waypoints = list(way_fid_data[0].keys())
@@ -151,7 +155,9 @@ class FiducialTF:
                 # For each fiducial
                 for fid in detections:
                     # Transform fiducial into body frame
-                    fid.fiducial_pose = self._transform_pose_to_body_frame(fid.fiducial_pose)
+                    fid.fiducial_pose = self._transform_pose_to_body_frame(
+                        fid.fiducial_pose
+                    )
 
         # Save way_fid_data as pickle
         if indoor:
@@ -159,10 +165,11 @@ class FiducialTF:
         else:
             outfile = "outdoor_way_fid_data.pickle"
 
-        with open(outfile, 'wb') as f:
+        with open(outfile, "wb") as f:
             pickle.dump(way_fid_data, f)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     # Init ros node
     rospy.init_node("fiducial_tf")
 
@@ -180,29 +187,29 @@ if __name__ == '__main__':
     # Populate static transforms
     for tf in tf_static_yml["transforms"]:
         fid_tf.populateStaticTf(
-            x=tf['transform']['translation']['x'],
-            y=tf['transform']['translation']['y'],
-            z=tf['transform']['translation']['z'],
-            qx=tf['transform']['rotation']['x'],
-            qy=tf['transform']['rotation']['y'],
-            qz=tf['transform']['rotation']['z'],
-            qw=tf['transform']['rotation']['w'],
-            frame_id=tf['header']['frame_id'],
-            child_frame_id=tf['child_frame_id'],
-            header_seq=tf['header']['seq'],
-            header_stamp_s=tf['header']['stamp']['secs'],
-            header_stamp_ns=tf['header']['stamp']['nsecs']
+            x=tf["transform"]["translation"]["x"],
+            y=tf["transform"]["translation"]["y"],
+            z=tf["transform"]["translation"]["z"],
+            qx=tf["transform"]["rotation"]["x"],
+            qy=tf["transform"]["rotation"]["y"],
+            qz=tf["transform"]["rotation"]["z"],
+            qw=tf["transform"]["rotation"]["w"],
+            frame_id=tf["header"]["frame_id"],
+            child_frame_id=tf["child_frame_id"],
+            header_seq=tf["header"]["seq"],
+            header_stamp_s=tf["header"]["stamp"]["secs"],
+            header_stamp_ns=tf["header"]["stamp"]["nsecs"],
         )
 
         # Invert the transform and populate the static transforms
         inverted_tf_translation, inverted_tf_quaternion = fid_tf.invertTf(
-            x=tf['transform']['translation']['x'],
-            y=tf['transform']['translation']['y'],
-            z=tf['transform']['translation']['z'],
-            qx=tf['transform']['rotation']['x'],
-            qy=tf['transform']['rotation']['y'],
-            qz=tf['transform']['rotation']['z'],
-            qw=tf['transform']['rotation']['w'],
+            x=tf["transform"]["translation"]["x"],
+            y=tf["transform"]["translation"]["y"],
+            z=tf["transform"]["translation"]["z"],
+            qx=tf["transform"]["rotation"]["x"],
+            qy=tf["transform"]["rotation"]["y"],
+            qz=tf["transform"]["rotation"]["z"],
+            qw=tf["transform"]["rotation"]["w"],
         )
 
         fid_tf.populateStaticTf(
@@ -213,11 +220,11 @@ if __name__ == '__main__':
             qy=inverted_tf_quaternion[1],
             qz=inverted_tf_quaternion[2],
             qw=inverted_tf_quaternion[3],
-            frame_id=tf['child_frame_id'],
-            child_frame_id=tf['header']['frame_id'],
-            header_seq=tf['header']['seq'],
-            header_stamp_s=tf['header']['stamp']['secs'],
-            header_stamp_ns=tf['header']['stamp']['nsecs']
+            frame_id=tf["child_frame_id"],
+            child_frame_id=tf["header"]["frame_id"],
+            header_seq=tf["header"]["seq"],
+            header_stamp_s=tf["header"]["stamp"]["secs"],
+            header_stamp_ns=tf["header"]["stamp"]["nsecs"],
         )
 
     # Broadcast static transforms

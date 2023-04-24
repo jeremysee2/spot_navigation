@@ -1,7 +1,7 @@
 FROM osrf/ros:noetic-desktop-full
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
-RUN DEBIAN_FRONTEND=noninteractive apt install -y git
+RUN DEBIAN_FRONTEND=noninteractive apt install -y git python3-pip
 
 # Download the Spot ROS packages
 RUN mkdir -p /ros/catkin_ws/src
@@ -13,6 +13,17 @@ RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
     git clone -b $SPOTNAV_GIT_BRANCH https://github.com/jeremysee2/spot_navigation.git /ros/catkin_ws/src/spot_navigation
 
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
+
+# Install spot_wrapper
+RUN git clone https://github.com/jeremysee2/spot_wrapper.git /ros/catkin_ws/src/spot_ros/spot_wrapper && \
+    cd /ros/catkin_ws/src/spot_ros/spot_wrapper && \
+    pip install -r requirements.txt && \
+    pip install -e .
+
+# Download RTABMap ROS from source
+RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros && \
+    cd /ros/catkin_ws/src/rtabmap_ros && \
+    git checkout -b 46c2988e
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
 
@@ -40,15 +51,12 @@ RUN git clone https://github.com/laurentkneip/opengv.git /ros/opengv && \
 WORKDIR /ros
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap.git /ros/rtabmap
 RUN cd /ros/rtabmap/build && \
-    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON _DWITH_G2O=YES .. && \
+    cmake -DWITH_ALICE_VISION=ON -DWITH_OPENGV=ON -DRTABMAP_SYNC_MULTI_RGBD=ON -DWITH_G2O=YES .. && \
     make -j$(nproc) && \
     make install && \
     cd ../.. && \
     rm -rf rtabmap && \
     ldconfig
-
-# Install RTABMap ROS from source
-RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
 
 RUN python3 -m pip install cython bosdyn-client bosdyn-mission bosdyn-api bosdyn-core empy numpy
 RUN chmod +x /opt/ros/noetic/setup.sh
