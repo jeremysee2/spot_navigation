@@ -23,7 +23,7 @@ from std_msgs.msg import String
 from geometry_msgs.msg import PoseStamped
 from spot_msgs.msg import AprilTagProperties, WorldObjectArray, WorldObject
 from spot_msgs.msg import FrameTreeSnapshot, ParentEdge
-from spot_msgs.msg import NavigateInitAction, NavigateInitGoal
+from spot_msgs.srv import NavigateInitRequest, NavigateInitResponse
 from spot_msgs.msg import NavigateToAction, NavigateToGoal
 from spot_msgs.srv import ListGraphResponse
 from std_srvs.srv import TriggerRequest
@@ -54,11 +54,6 @@ class SpotDoorDemo:
             "/spot/navigate_to", NavigateToAction
         )
 
-        # Create an action client for the /spot/navigate_init action
-        self.navigate_init_client = actionlib.SimpleActionClient(
-            "/spot/navigate_init", NavigateInitAction
-        )
-
     def call_service(self, service_name: str, *args, **kwargs):
         """Call a service and wait for it to be available"""
         try:
@@ -74,23 +69,22 @@ class SpotDoorDemo:
         """Walk the current graph in GraphNav"""
         rospy.loginfo("Walking the current graph")
 
+        # Call the /spot/navigate_init service
+        req = NavigateInitRequest(
+            upload_path="/home/ming/Desktop/catkin_ws/test_data/door_demo",
+            initial_localization_fiducial=True,
+            initial_localization_waypoint='np'
+        )
+        resp = self.call_service("/spot/navigate_init", req)
+
+        # Check if the action succeeded
+        if resp.success:
+            rospy.loginfo(resp.message)
+
         # Call the ListGraph service
         list_graph: ListGraphResponse = self.call_service("/spot/list_graph")
         waypoints = list_graph.waypoint_ids
         start, end = waypoints[0], waypoints[-1]
-
-        # Call the /spot/navigate_init action
-        navigate_init_goal = NavigateInitGoal(
-            upload_path="",
-            initial_localization_fiducial=True,
-            initial_localization_waypoint=start,
-        )
-        self.navigate_init_client.send_goal(navigate_init_goal)
-        self.navigate_init_client.wait_for_result()
-
-        # Check if the action succeeded
-        if self.navigate_init_client.get_state() == GoalStatus.SUCCEEDED:
-            rospy.loginfo("NavigateInit action succeeded")
 
         navigate_to_goal = NavigateToGoal(navigate_to=end)
         self.navigate_to_client.send_goal(navigate_to_goal)
@@ -164,7 +158,7 @@ class SpotDoorDemo:
             pickle.dump(fiducials, f)
 
         angle = 1.6
-        req = ArmJointMovementRequest(joint_target=[0.1, -angle, angle, 0.0, 0.0, 0.0])
+        req = ArmJointMovementRequest(joint_target=[-0.2, -angle, angle, 0.0, 0.0, 0.0])
         self.call_service("/spot/arm_carry", TriggerRequest())
         self.call_service("/spot/arm_joint_move", req)
 

@@ -13,7 +13,7 @@
     <group ns="$(arg camera_name1)">
         <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera1_nodelet_manager">
             <remap from="rgb/image"         to="/spot/camera/frontleft/image"/>
-            <remap from="depth/image"       to="/spot/depth/frontleft/image"/>
+            <remap from="depth/image"       to="/spot/depth/frontleft/depth_in_visual"/>
             <remap from="rgb/camera_info"   to="/spot/camera/frontleft/camera_info"/>
         </node>
     </group>
@@ -21,7 +21,7 @@
     <group ns="$(arg camera_name2)">
         <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera2_nodelet_manager">
             <remap from="rgb/image"         to="/spot/camera/frontright/image"/>
-            <remap from="depth/image"       to="/spot/depth/frontright/image"/>
+            <remap from="depth/image"       to="/spot/depth/frontright/depth_in_visual"/>
             <remap from="rgb/camera_info"   to="/spot/camera/frontright/camera_info"/>
         </node>
     </group>
@@ -29,7 +29,7 @@
     <group ns="$(arg camera_name3)">
         <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera3_nodelet_manager">
             <remap from="rgb/image"         to="/spot/camera/left/image"/>
-            <remap from="depth/image"       to="/spot/depth/left/image"/>
+            <remap from="depth/image"       to="/spot/depth/left/depth_in_visual"/>
             <remap from="rgb/camera_info"   to="/spot/camera/left/camera_info"/>
         </node>
     </group>
@@ -37,7 +37,7 @@
     <group ns="$(arg camera_name4)">
         <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera4_nodelet_manager">
             <remap from="rgb/image"         to="/spot/camera/right/image"/>
-            <remap from="depth/image"       to="/spot/depth/right/image"/>
+            <remap from="depth/image"       to="/spot/depth/right/depth_in_visual"/>
             <remap from="rgb/camera_info"   to="/spot/camera/right/camera_info"/>
         </node>
     </group>
@@ -45,7 +45,7 @@
     <group ns="$(arg camera_name5)">
         <node pkg="nodelet" type="nodelet" name="rgbd_sync" args="standalone rtabmap_ros/rgbd_sync camera5_nodelet_manager">
             <remap from="rgb/image"         to="/spot/camera/back/image"/>
-            <remap from="depth/image"       to="/spot/depth/back/image"/>
+            <remap from="depth/image"       to="/spot/depth/back/depth_in_visual"/>
             <remap from="rgb/camera_info"   to="/spot/camera/back/camera_info"/>
         </node>
     </group>
