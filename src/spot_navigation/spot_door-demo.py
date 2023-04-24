@@ -73,7 +73,7 @@ class SpotDoorDemo:
         req = NavigateInitRequest(
             upload_path="/home/ming/Desktop/catkin_ws/test_data/door_demo",
             initial_localization_fiducial=True,
-            initial_localization_waypoint='np'
+            initial_localization_waypoint="np",
         )
         resp = self.call_service("/spot/navigate_init", req)
 
