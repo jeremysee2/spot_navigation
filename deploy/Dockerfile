@@ -15,15 +15,17 @@ RUN --mount=type=secret,id=SPOTNAV_GIT_BRANCH \
 RUN git clone https://github.com/jeremysee2/spot_ros.git /ros/catkin_ws/src/spot_ros
 
 # Install spot_wrapper
-RUN git clone https://github.com/jeremysee2/spot_wrapper.git /ros/catkin_ws/src/spot_ros/spot_wrapper && \
-    cd /ros/catkin_ws/src/spot_ros/spot_wrapper && \
-    pip install -r requirements.txt && \
+WORKDIR /ros/catkin_ws/src/spot_ros
+RUN git clone https://github.com/jeremysee2/spot_wrapper.git /ros/catkin_ws/src/spot_ros/spot_wrapper
+WORKDIR /ros/catkin_ws/src/spot_ros/spot_wrapper
+RUN pip install -r requirements.txt && \
     pip install -e .
 
 # Download RTABMap ROS from source
-RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros && \
-    cd /ros/catkin_ws/src/rtabmap_ros && \
-    git checkout -b 46c2988e
+WORKDIR /ros/catkin_ws
+RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
+WORKDIR /ros/catkin_ws/src/rtabmap_ros
+RUN git checkout -b 46c2988e
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
 
