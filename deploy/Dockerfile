@@ -25,7 +25,7 @@ RUN pip install -r requirements.txt && \
 WORKDIR /ros/catkin_ws
 RUN git clone -b noetic-devel https://github.com/introlab/rtabmap_ros.git /ros/catkin_ws/src/rtabmap_ros
 WORKDIR /ros/catkin_ws/src/rtabmap_ros
-RUN git checkout -b 46c2988e
+RUN git checkout 46c2988e
 
 RUN DEBIAN_FRONTEND=noninteractive apt update
 
